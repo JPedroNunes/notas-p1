@@ -1,5 +1,4 @@
 dbus-python==1.2.18
-debtags==2.1
 decorator==4.4.2
 defusedxml==0.7.1
 deprecation==2.0.7
