@@ -88,7 +88,6 @@ Jinja2==3.0.3
 jq==1.2.1
 jsonschema==3.2.0
 kaitaistruct==0.9
-kali-tweaks==2022.2.0
 KismetCaptureBtGeiger==2021.7.1
 KismetCaptureFreaklabsZigbee==2018.7.0
 KismetCaptureRtl433==2020.10.1
