@@ -1,4 +1,5 @@
 dbus-python==1.2.18
+numpy==1.21.5
 decorator==4.4.2
 defusedxml==0.7.1
 deprecation==2.0.7
@@ -130,7 +131,6 @@ nplusone==1.0.0
 ntlm-auth==1.4.0
 numba==0.52.0
 numexpr==2.8.1
-numpy==1.21.5
 odfpy==1.4.2
 olefile==0.46
 onboard==1.4.1
