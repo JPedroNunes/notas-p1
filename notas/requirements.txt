@@ -63,7 +63,6 @@ hpack==4.0.0
 html2text==2020.1.16
 html5lib==1.1
 httpagentparser==1.9.1
-humanize==0.0.0
 hupper==1.10.3
 hyperframe==6.0.0
 hyperlink==21.0.0
@@ -126,7 +125,6 @@ mitmproxy==6.0.2
 mnemonic==0.19
 more-itertools==8.10.0
 MouseInfo==0.1.3
-mpmath==0.0.0
 msgpack==1.0.3
 msldap==0.3.30
 multidict==5.1.0
@@ -148,7 +146,6 @@ odfpy==1.4.2
 olefile==0.46
 onboard==1.4.1
 openpyxl==3.0.9
-orjson==0.0.0
 packaging==21.3
 pandas==1.3.5
 paramiko==2.8.1
