@@ -20,7 +20,6 @@ et-xmlfile==1.0.1
 evdev==1.4.0
 ExifRead==2.3.2
 faraday-agent-parameters-types==1.0.3
-faraday-client==1.1.0
 faraday-plugins==1.5.9
 faradaysec==3.19.0
 fastapi==0.74.1
