@@ -17,7 +17,14 @@ def resolution(request):
     'Lista 4', 'Prova 3', 'Lista 5', 'Lista 6',
     'Prova 4', 'Lista 7', 'Lista 8')
 
-    data['alunos'] = Aluno.objects.all()
+    lista = []
+    for i in Aluno.objects.all():
+        i.nome = i.nome.title()
+        lista.append(i)
+
+    alunos_ordenados = sorted(lista, key = lambda x: x.nome)
+
+    data['alunos'] = alunos_ordenados
     data['colunas'] = colunas
 
     return render(request, 'nota/resolution.html', data)
@@ -25,10 +32,17 @@ def resolution(request):
 def notasAcumuladas(request):
 
     data = {}
-    colunas = ('Nome', 'AB1', 'AB2', 
+    colunas = ('Nome', 'Turma', 'AB1', 'AB2', 
     'Reav', 'Final', 'Média', 'Situação',)
 
-    data['alunos'] = NotaAluno.objects.all()
+    lista = []
+    for i in NotaAluno.objects.all():
+        i.nome = i.nome.title()
+        lista.append(i)
+
+    alunos_ordenados = sorted(lista, key = lambda x: x.nome)
+
+    data['alunos'] = alunos_ordenados
     data['colunas'] = colunas
 
     return render(request, 'nota/notas.html', data)
@@ -399,6 +413,12 @@ def importFinal(request):
 
     return render(request, 'nota/importFinal.html')
 
+def calcularMediaFinal(aluno):
+    alunoF = NotaAluno.objects.get(nome = aluno.nome)
+    alunoF.mediaFinal = round(((alunoF.ab1 + alunoF.ab2)/2), 2)
+    print(alunoF.mediaFinal)
+    alunoF.save()
+
 @user_passes_test(lambda u: u.is_superuser)
 def calcularAB1(request):
     if request.method == 'POST':
@@ -414,6 +434,9 @@ def calcularAB1(request):
                 alunoF = NotaAluno(nome = aluno.nome, ab1 = notaAB1)
                 alunoF.save()
 
+            calcularMediaFinal(aluno)
+            
+
     return render(request, 'nota/calcularAB1.html')
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -425,10 +448,16 @@ def calcularAB2(request):
             try:
                 alunoF = NotaAluno.objects.get(nome = aluno.nome)
                 alunoF.ab2 = round(((((aluno.prova3 + aluno.prova4)*7)/20) + (((aluno.lista5 + aluno.lista6 + aluno.lista7 + aluno.lista8)*3)/66)), 2)
+                alunoF.mediaFinal = round( ((alunoF.ab1 + alunoF.ab2)/2), 2)
+                if alunoF.mediaFinal >= 7:
+                    alunoF.situacao = 'APROVADO'
                 alunoF.save()
             except:
                 notaAB2 = round(((((aluno.prova3 + aluno.prova4)*7)/20) + (((aluno.lista5 + aluno.lista6 + aluno.lista7 + aluno.lista8)*3)/66)), 2)
                 alunoF = NotaAluno(nome = aluno.nome, ab1 = notaAB2)
+                alunoF.mediaFinal = round( ((alunoF.ab1 + alunoF.ab2)/2), 2)
+                if alunoF.mediaFinal >= 7:
+                    alunoF.situacao = 'APROVADO'
                 alunoF.save()
 
     return render(request, 'nota/calcularAB2.html')
@@ -437,14 +466,25 @@ def searchNotaIndividual(request):
     if request.method == 'POST':
         search = request.POST['search']
 
-        result_search = Aluno.objects.filter(nome__contains=search)
+        if request.POST['select'] == 'nome':
+            result_search = Aluno.objects.filter(nome__contains=search)
+        elif request.POST['select'] == 'turma':
+            result_search = Aluno.objects.filter(turma=search.upper())
+
         dados = {}
         colunas = ('Nome', 'Turma', 'Prova 1', 
         'Lista 1', 'Lista 2', 'Prova 2', 'Lista 3',
         'Lista 4', 'Prova 3', 'Lista 5', 'Lista 6',
         'Prova 4', 'Lista 7', 'Lista 8')
 
-        dados['alunos'] = result_search
+        lista = []
+        for i in result_search:
+            i.nome = i.nome.title()
+            lista.append(i)
+
+        alunos_ordenados = sorted(lista, key = lambda x: x.nome)
+
+        dados['alunos'] = alunos_ordenados
         dados['colunas'] = colunas
         
         return render(request, 'nota/resolution.html', dados)
@@ -455,12 +495,23 @@ def searchNotaGeral(request):
     if request.method == 'POST':
         search = request.POST['search']
 
-        result_search = NotaAluno.objects.filter(nome__contains=search)
+        if request.POST['select'] == 'nome':
+            result_search = NotaAluno.objects.filter(nome__contains=search)
+        elif request.POST['select'] == 'turma':
+            result_search = NotaAluno.objects.filter(turma=search.upper())
+
         dados = {}
-        colunas = ('Nome', 'AB1', 'AB2', 
+        colunas = ('Nome', 'Turma', 'AB1', 'AB2', 
         'Reav', 'Final', 'Média', 'Situação',)
 
-        dados['alunos'] = result_search
+        lista = []
+        for i in result_search:
+            i.nome = i.nome.title()
+            lista.append(i)
+
+        alunos_ordenados = sorted(lista, key = lambda x: x.nome)
+
+        dados['alunos'] = alunos_ordenados
         dados['colunas'] = colunas
         
         return render(request, 'nota/notas.html', dados)

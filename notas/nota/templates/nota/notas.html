@@ -4,6 +4,10 @@
 
 <form action="{% url 'searchgeral' %}" method="POST" class="form-inline my-2 my-lg-0">
     {% csrf_token %}
+    <select id="select" onchange="trocarPesquisa(event)" class="form-control mr-sm-2" name="select">
+      <option id="nome" class="selected" value="nome">Nome</option>
+      <option id="turma" value="turma">Turma</option>
+    </select>
     <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar nome..." name="search" aria-label="Search">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
 </form>
@@ -26,7 +30,7 @@
     <thead class="thead-dark">
         <tr>
             {% for coluna in colunas%}
-            <th scope="col">{{coluna}}</th>
+            <th class="center" scope="col">{{coluna}}</th>
             {% endfor%}
       </tr>
     </thead>
@@ -34,21 +38,44 @@
         {%for aluno in alunos%}
         <tr>
             <td>{{aluno.nome}}</td>
-            <td>{{aluno.ab1}}</td>
-            <td>{{aluno.ab2}}</td>
-            <td>{{aluno.reav}}</td>
-            <td>{{aluno.final}}</td>
-            <td>{{aluno.mediaFinal}}</td>
+            <td class="center">{{aluno.turma}}</td>
+            <td class="center">{{aluno.ab1}}</td>
+            <td class="center">{{aluno.ab2}}</td>
+            <td class="center">{{aluno.reav}}</td>
+            <td class="center">{{aluno.final}}</td>
+            <td class="center">{{aluno.mediaFinal}}</td>
             {%if aluno.situacao == 'APROVADO' %} 
-            <td style="background-color: green;">{{aluno.situacao}}</td>
+            <td class="center" style="background-color: green;">{{aluno.situacao}}</td>
             {% elif aluno.situacao == 'REPROVADO' %}
-            <td style="background-color: red;">{{aluno.situacao}}</td>
+            <td class="center" style="background-color: red;">{{aluno.situacao}}</td>
             {% else %}
-            <td style="background-color: yellow;">{{aluno.situacao}}</td>
+            <td class="center" style="background-color: yellow;">{{aluno.situacao}}</td>
             {% endif %}
 
         </tr>
         {% endfor %}
     </tbody>
   </table>
+  <script>
+    function trocarPesquisa(e){
+      if(e.target.value == 'turma') {
+        var nome = document.querySelector('#nome');
+        var turma = document.querySelector('#turma');
+
+        e.target.nextElementSibling.placeholder = 'Pesquisar turma...'
+
+        nome.classList.remove('selected');
+        turma.classList.add('selected');
+      }
+      else{
+        var nome = document.querySelector('#nome');
+        var turma = document.querySelector('#turma');
+
+        e.target.nextElementSibling.placeholder = 'Pesquisar nome...'
+
+        turma.classList.remove('selected');
+        nome.classList.add('selected');
+      }
+    }
+  </script>
 {% endblock %}
